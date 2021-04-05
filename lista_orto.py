@@ -147,9 +147,9 @@ class ListaOrtogonal():
         c = c2 - c1
         p = None
         encontrado = False
-        for i in range(1,self.NoColumnas()):
+        for i in range(1,self.NoColumnas()+1):
             auxi = aux
-            for j in range(1,self.NoFilas()):
+            for j in range(1,self.NoFilas()+1):
                 if i == f1 and j == c1:
                     p = auxi
                     encontrado = True

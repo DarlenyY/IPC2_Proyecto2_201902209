@@ -15,16 +15,20 @@ from datetime import datetime
 Ventana = Tk()
 Ventana.title("Principal") #Titulo
 Ventana.geometry("1000x500") #AnchoxAlto
-Ventana.configure(background = "#212F3D") #Color
-###########INTERFAZ############
-Label(Ventana,text="Original").place(x=25, y=390)
-Label(Ventana,text="Modificada").place(x=495, y=390)
+Ventana.configure(background = "#17202A") #Color
+ori = Label(Ventana,text="Original", fg = "#E74C3C")
+ori.place(x=25, y=390)
+mod = Label(Ventana,text="Modificada", fg = "#E74C3C")
+mod.place(x=495, y=390)
 image1 = tk.PhotoImage(file="inicio.png")
 image2 = tk.PhotoImage(file="inicio.png")
 label = tk.Label(Ventana, image = image1)
 label2 = tk.Label(Ventana, image = image2)
 label.place(x=20, y=20)
 label2.place(x=490, y=20)
+ori.config(bg = "#17202A")
+mod.config(bg = "#17202A")
+###########INTERFAZ############
 
 html = False
 datosRepo = ""
@@ -32,7 +36,7 @@ nombres = ""
 nombre = ""
 ListaC = ListaCircular()
 def cargarArchivo():
-    global datosRepo, html, nombres
+    global datosRepo, html, nombres, ListaC
     ruta = filedialog.askopenfilename (title = "Abrir") 
     try:
         tree = ET.parse(ruta)
@@ -47,7 +51,8 @@ def cargarArchivo():
                 a = nombres.split(sep = ",")
                 for nom in range(0,len(a)):
                     if a[nom] == nombre:
-                        print("error, la matriz "+nombre+" ya existe")
+                        now = datetime.now()
+                        datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Cargar Archivo - Error la matriz "+ nombre +" ya existe,"   
                         nueva = False
                         i = i + 1
                 if nueva == True:
@@ -55,7 +60,6 @@ def cargarArchivo():
                     n = names[i].find("fila").text
                     #columnas
                     m = names[i].find("columna").text
-                    print(nombre+" "+n+" "+m)
                     #imagen
                     imagen = names[i].find("imagen").text
                     lineas = imagen.split(sep = None, maxsplit = -1)
@@ -66,10 +70,10 @@ def cargarArchivo():
                             columnas = list(lineas[j])
                             if len(columnas) != int(m):
                                 mas = True
+                                now = datetime.now()
+                                datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Cargar Archivo - Error la matriz "+ nombre +" exede el numeo de columnas indicado,"
                                 break
                             j = j + 1
-                        if mas:
-                            print("error, la matriz "+nombre+" excede el numero de columnas indicado")
                         if mas == False:
                             nombres = nombres + nombre +","
                             caracter = ""
@@ -103,27 +107,27 @@ def cargarArchivo():
                             now = datetime.now()
                             datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - "+ nombre +" - Espacios llenos: "+str(lleno)+" - Espacios vacíos: " +str(vacio) + ","
                     else:
-                        print("error, la matriz "+nombre+" excede el numero de filas indicado")
+                        now = datetime.now()
+                        datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Cargar Archivo - Error la matriz "+ nombre +" exede el numeo de filas indicado,"
                     i = i + 1
-        MessageBox.showinfo("Cargar Archivo", "El archivo se cargo correctamente")
+        MessageBox.showinfo("Cargar Archivo", "El archivo se termino de cargar")
         html = True
     except:
         MessageBox.showerror("Error", "Carge el archivo de nuevo")
+
 def elegir(lista,a):
-    global datosRepo,nombre,image1,image2,label,label2
+    global datosRepo, nombre, image1, image2, label, label2, ListaC
     nombre = lista.get()
+    ListaC.buscarMat(nombre,a)
     if a == 1:
-        ListaC.buscarMat(nombre,a)
         image2 = tk.PhotoImage(file=nombre+"rotH.png")
         now = datetime.now()
         datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Rotacion horizontal de una imagen - Matriz (o matrices) usadas: " +nombre + ","
     elif a == 2:
-        ListaC.buscarMat(nombre,a)
         image2 = tk.PhotoImage(file=nombre+"rotV.png")
         now = datetime.now()
         datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Rotacion vertical de una imagen - Matriz (o matrices) usadas: " +nombre + ","
     elif a == 3:
-        ListaC.buscarMat(nombre,a)
         image2 = tk.PhotoImage(file=nombre+"tran.png")
         now = datetime.now()
         datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Transpuesta de una imagen - Matriz (o matrices) usadas: " +nombre + ","
@@ -135,6 +139,63 @@ def elegir(lista,a):
     label.place(x=20, y=20)
     label2.place(x=490, y=20)
 
+def linea(lista,f1,c1,ca,accion):
+    global datosRepo, nombre, image1, image2, label, label2, ListaC
+    nombre = lista.get()
+    f = f1.get()
+    c = c1.get()
+    cant = ca.get()
+    if str(f) != "" and str(c) != "" and str(cant) != "":
+        ListaC.buscarMat2(nombre, int(f), int(c), int(cant), accion)
+        if accion == 5:
+            image2 = tk.PhotoImage(file=nombre+"agreH.png")
+            now = datetime.now()
+            datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar línea horizontal a una imagen - Matriz (o matrices) usadas: " +nombre + ","
+        elif accion == 6:
+            image2 = tk.PhotoImage(file=nombre+"agreV.png")
+            now = datetime.now()
+            datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar línea vertical a una imagen - Matriz (o matrices) usadas: " +nombre + ","
+        elif accion == 8:
+            image2 = tk.PhotoImage(file=nombre+"agreT.png")
+            now = datetime.now()
+            datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar triangulo a una imagen - Matriz (o matrices) usadas: " +nombre + ","
+        image1 = tk.PhotoImage(file=nombre+".png")
+        image1 = image1.subsample(1,1)
+        image2 = image2.subsample(1,1)
+        label = tk.Label(Ventana, image = image1)
+        label2 = tk.Label(Ventana, image = image2)
+        label.place(x=20, y=20)
+        label2.place(x=490, y=20)
+    else:
+        MessageBox.showerror("Error", "Debe llenarse todos los campos")
+
+def limYr(lista,f1,c1,f2,c2,accion):
+    global datosRepo, nombre, image1, image2, label, label2, ListaC
+    nombre = lista.get()
+    f = f1.get()
+    c = c1.get()
+    ff = f2.get()
+    cc = c2.get()
+    if str(f) != "" and str(c) != "" and str(ff) != "" and str(cc) != "":
+        ListaC.buscarMat3(nombre, int(f), int(c), int(ff),int(cc), accion)
+        if accion == 4:
+            image2 = tk.PhotoImage(file=nombre+"limp.png")
+            now = datetime.now()
+            datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Limpiar zona de una imagen - Matriz (o matrices) usadas: " +nombre + ","
+        elif accion == 7:
+            image2 = tk.PhotoImage(file=nombre+"agreR.png")
+            now = datetime.now()
+            datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar rectángulo - Matriz (o matrices) usadas: " +nombre + ","
+        image1 = tk.PhotoImage(file=nombre+".png")
+        image1 = image1.subsample(1,1)
+        image2 = image2.subsample(1,1)
+        label = tk.Label(Ventana, image = image1)
+        label2 = tk.Label(Ventana, image = image2)
+        label.place(x=20, y=20)
+        label2.place(x=490, y=20)
+    else:
+        MessageBox.showerror("Error", "Debe llenarse todos los campos")
+
 def destruir(ventana):
     ventana.destroy()
 
@@ -145,14 +206,16 @@ def rotar(op):
         ventana = Toplevel()
         ventana.title("Operaciones") 
         ventana.geometry("300x90")
-        op = Label(ventana,text="Seleccione una matriz para realizar la operación") 
+        ventana.configure(background = "#17202A")
+        op = Label(ventana,text="Seleccione una matriz para realizar la operación", fg = "white") 
         op.pack()
+        op.configure(background = "#17202A")
         lista = ttk.Combobox(ventana,width=17, state="readonly")
         nom = ListaC.Nombres().split(",")
         lista["values"] = nom
         lista.set(nom[0])
         lista.place(x=30, y=40)
-        button = Button(ventana,text="Aceptar",bg="gold",command=lambda:[elegir(lista,a),destruir(ventana)])
+        button = Button(ventana,text="Aceptar", fg = "white",bg="#E74C3C",command=lambda:[elegir(lista,a),destruir(ventana)])
         button.place(x=170,y=40)
         ventana.mainloop()
     else:
@@ -163,57 +226,203 @@ def limpiar():
     if html: 
         ventana = Toplevel()
         ventana.title("Operaciones") 
-        ventana.geometry("300x300")
-        Label(ventana,text="Seleccione una matriz para realizar la operación") .pack()
+        ventana.geometry("300x170")
+        ventana.configure(background = "#17202A")
+        a = Label(ventana,text="Seleccione una matriz para realizar la operación", fg = "white")
+        a.pack()
+        a.config(bg = "#17202A")
         lista = ttk.Combobox(ventana,width=17, state="readonly")
         nom = ListaC.Nombres().split(",")
         lista["values"] = nom
         lista.set(nom[0])
         lista.pack()
-        Label(ventana,text="Coordenada inicial").pack()
-        Label(ventana,text="Fila").place(x=20,y=60)
-        f1 = tk.Entry(ventana,width=10,justify=tk.LEFT)
-        f1.place(x=50,y=60)
-        Label(ventana,text="Columna").place(x=150,y=60)
-        c1 = tk.Entry(ventana,width=10,justify=tk.LEFT)
-        c1.place(x=210,y=60)
-        Label(ventana,text="Coordenada final").place(x=103,y=80)
-        Label(ventana,text="Fila").place(x=20,y=100)
-        f2 = tk.Entry(ventana,width=10,justify=tk.LEFT)
-        f2.place(x=50,y=100)
-        Label(ventana,text="Columna").place(x=150,y=100)
-        c2 = tk.Entry(ventana,width=10,justify=tk.LEFT)
-        c2.place(x=210,y=100)
-        button = Button(ventana,text="Aceptar",bg="gold",command=lambda:[destruir(ventana)])
-        button.place(x=120,y=130)
+        b = Label(ventana,text="Coordenada inicial", fg = "white")
+        b.pack()
+        b.config(bg = "#17202A")
+        c = Label(ventana,text="Fila", fg = "#E74C3C")
+        c.place(x=60,y=60)
+        c.config(bg = "#17202A")
+        f1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f1.place(x=90,y=60)
+        d = Label(ventana,text="Columna", fg = "#E74C3C")
+        d.place(x=145,y=60)
+        d.config(bg = "#17202A")
+        c1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c1.place(x=205,y=60)
+        e = Label(ventana,text="Coordenada final", fg = "white")
+        e.place(x=103,y=80)
+        e.config(bg = "#17202A")
+        f = Label(ventana,text="Fila", fg = "#E74C3C")
+        f.place(x=60,y=100)
+        f.config(bg = "#17202A")
+        f2 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f2.place(x=90,y=100)
+        g = Label(ventana,text="Columna", fg = "#E74C3C")
+        g.place(x=145,y=100)
+        g.config(bg = "#17202A")
+        c2 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c2.place(x=205,y=100)
+        button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[limYr(lista,f1,c1,f2,c2,4),destruir(ventana)])
+        button.place(x=125,y=130)
         ventana.mainloop()
     else:
         MessageBox.showinfo("Operaciones", "Debe cargar un archivo de entrada")
 
 
-def agregarH():
+def agregarF(accion):
     global datosRepo, html
     if html:
-        nombre = "mat"
-        now = datetime.now()
-        datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar línea horizontal a una imagen - Matriz (o matrices) usadas: " +nombre + ","
+        ventana = Toplevel()
+        ventana.title("Operaciones") 
+        ventana.geometry("300x170")
+        ventana.configure(background = "#17202A")
+        a = Label(ventana,text="Seleccione una matriz para realizar la operación", fg = "white")
+        a.pack()
+        a.config(bg = "#17202A")
+        lista = ttk.Combobox(ventana,width=17, state="readonly")
+        nom = ListaC.Nombres().split(",")
+        lista["values"] = nom
+        lista.set(nom[0])
+        lista.pack()
+        b = Label(ventana,text="Coordenada inicial", fg = "white")
+        b.pack()
+        b.config(bg = "#17202A")
+        c = Label(ventana,text="Fila", fg = "#E74C3C")
+        c.place(x=60,y=60)
+        c.config(bg = "#17202A")
+        f1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f1.place(x=90,y=60)
+        d = Label(ventana,text="Columna", fg = "#E74C3C")
+        d.place(x=145,y=60)
+        d.config(bg = "#17202A")
+        c1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c1.place(x=205,y=60)
+        e = Label(ventana,text="Cantidad de Elementos", fg = "white")
+        e.place(x=85,y=80)
+        e.config(bg = "#17202A")
+        cant= tk.Entry(ventana,width=10,justify=tk.LEFT)
+        cant.place(x=117,y=100)
+        button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[linea(lista,f1,c1,cant,accion),destruir(ventana)])
+        button.place(x=125,y=130)
+        ventana.mainloop()
     else:
         MessageBox.showinfo("Operaciones", "Debe cargar un archivo de entrada")
 
-def agregarV():
-    global datosRepo, html
-    if html: 
-        nombre = "mat"
-        now = datetime.now()
-        datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar línea vertical a una imagen - Matriz (o matrices) usadas: " +nombre + ","
-    else:
-        MessageBox.showinfo("Operaciones", "Debe cargar un archivo de entrada")
 
 def agregarR():    
-    pass  
+    global datosRepo, html
+    if html: 
+        ventana = Toplevel()
+        ventana.title("Operaciones") 
+        ventana.geometry("300x170")
+        ventana.configure(background = "#17202A")
+        a = Label(ventana,text="Seleccione una matriz para realizar la operación", fg = "white")
+        a.pack()
+        a.config(bg = "#17202A")
+        lista = ttk.Combobox(ventana,width=17, state="readonly")
+        nom = ListaC.Nombres().split(",")
+        lista["values"] = nom
+        lista.set(nom[0])
+        lista.pack()
+        b = Label(ventana,text="Coordenada inicial", fg = "white")
+        b.pack()
+        b.config(bg = "#17202A")
+        c = Label(ventana,text="Fila", fg = "#E74C3C")
+        c.place(x=60,y=60)
+        c.config(bg = "#17202A")
+        f1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f1.place(x=90,y=60)
+        d = Label(ventana,text="Columna", fg = "#E74C3C")
+        d.place(x=145,y=60)
+        d.config(bg = "#17202A")
+        c1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c1.place(x=205,y=60)
+        e = Label(ventana,text="Cantidad", fg = "white")
+        e.place(x=120,y=80)
+        e.config(bg = "#17202A")
+        f = Label(ventana,text="Filas", fg = "#E74C3C")
+        f.place(x=60,y=100)
+        f.config(bg = "#17202A")
+        f2 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f2.place(x=95,y=100)
+        g = Label(ventana,text="Columnas", fg = "#E74C3C")
+        g.place(x=140,y=100)
+        g.config(bg = "#17202A")
+        c2 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c2.place(x=205,y=100)
+        button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[limYr(lista,f1,c1,f2,c2,7),destruir(ventana)])
+        button.place(x=125,y=130)
+        ventana.mainloop()
+    else:
+        MessageBox.showinfo("Operaciones", "Debe cargar un archivo de entrada")
+ 
 
 def agregarT():    
-    pass 
+    global datosRepo, html
+    if html:
+        ventana = Toplevel()
+        ventana.title("Operaciones") 
+        ventana.geometry("300x170")
+        ventana.configure(background = "#17202A")
+        a = Label(ventana,text="Seleccione una matriz para realizar la operación", fg = "white")
+        a.pack()
+        a.config(bg = "#17202A")
+        lista = ttk.Combobox(ventana,width=17, state="readonly")
+        nom = ListaC.Nombres().split(",")
+        lista["values"] = nom
+        lista.set(nom[0])
+        lista.pack()
+        b = Label(ventana,text="Coordenada inicial", fg = "white")
+        b.pack()
+        b.config(bg = "#17202A")
+        c = Label(ventana,text="Fila", fg = "#E74C3C")
+        c.place(x=60,y=60)
+        c.config(bg = "#17202A")
+        f1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f1.place(x=90,y=60)
+        d = Label(ventana,text="Columna", fg = "#E74C3C")
+        d.place(x=145,y=60)
+        d.config(bg = "#17202A")
+        c1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c1.place(x=205,y=60)
+        e = Label(ventana,text="Numero de filas y columnas", fg = "white")
+        e.place(x=75,y=80)
+        e.config(bg = "#17202A")
+        cant= tk.Entry(ventana,width=10,justify=tk.LEFT)
+        cant.place(x=117,y=100)
+        button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[linea(lista,f1,c1,cant,8),destruir(ventana)])
+        button.place(x=125,y=130)
+        ventana.mainloop()
+    else:
+        MessageBox.showinfo("Operaciones", "Debe cargar un archivo de entrada")
+
+def dosMat(accion):
+    global datosRepo, html
+    if html:
+        ventana = Toplevel()
+        ventana.title("Operaciones") 
+        ventana.geometry("300x150")
+        ventana.configure(background = "#17202A")
+        a = Label(ventana,text="Matriz A", fg = "white")
+        a.pack()
+        a.config(bg = "#17202A")
+        lista = ttk.Combobox(ventana,width=17, state="readonly")
+        nom = ListaC.Nombres().split(",")
+        lista["values"] = nom
+        lista.set(nom[0])
+        lista.pack()
+        b = Label(ventana,text="Matriz B", fg = "white")
+        b.pack()
+        b.config(bg = "#17202A")
+        lista2 = ttk.Combobox(ventana,width=17, state="readonly")
+        lista2["values"] = nom
+        lista2.set(nom[0])
+        lista2.pack()
+        button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[destruir(ventana)])
+        button.pack()
+        ventana.mainloop()
+    else:
+        MessageBox.showinfo("Operaciones", "Debe cargar un archivo de entrada")
 
 def reporte():
     global datosRepo, html
@@ -264,32 +473,37 @@ def Docu():
     webbrowser.open_new_tab("Documentación\Ensayo.pdf")
 
 ###########INTERFAZ############
-Barra = Menu(Ventana)
+Barra = Menu(Ventana, bg = "#E74C3C",fg = "white")
+Barra.config(bg = "#E74C3C",fg = "white")
 #Cargar Archivo
 CargarArchivo = Menu(Barra)
+CargarArchivo.config(bg = "#E74C3C",fg = "white")
 CargarArchivo.add_command(label = "Cargar archivo de entrada",command=cargarArchivo)
 
 #Operaciones
 Operaciones = Menu(Barra)
+Operaciones.config(bg = "#E74C3C",fg = "white")
 Operaciones.add_command(label = "Rotacion horizontal de una imagen",command=lambda:[rotar(1)])
 Operaciones.add_command(label = "Rotacion vertical de una imagen",command=lambda:[rotar(2)])
 Operaciones.add_command(label = "Transpuesta de una imagen",command =lambda:[rotar(3)])
 Operaciones.add_command(label = "Limpiar zona de una imagen",command=limpiar)
-Operaciones.add_command(label = "Agregar línea horizontal a una imagen",command=agregarH)
-Operaciones.add_command(label = "Agregar línea vertical a una imagen",command=agregarV)
+Operaciones.add_command(label = "Agregar línea horizontal a una imagen",command=lambda:[agregarF(5)])
+Operaciones.add_command(label = "Agregar línea vertical a una imagen",command=lambda:[agregarF(6)])
 Operaciones.add_command(label = "Agregar rectángulo",command=agregarR)
 Operaciones.add_command(label = "Agregar triángulo rectángulo",command=agregarT)
-Operaciones.add_command(label = "Unión A, B")
-Operaciones.add_command(label = "Intersección A, B")
-Operaciones.add_command(label = "Diferencia A, B")
-Operaciones.add_command(label = "Diferencia simétrica A, B")
+Operaciones.add_command(label = "Unión A, B",command=lambda:[dosMat(9)])
+Operaciones.add_command(label = "Intersección A, B",command=lambda:[dosMat(10)])
+Operaciones.add_command(label = "Diferencia A, B",command=lambda:[dosMat(11)])
+Operaciones.add_command(label = "Diferencia simétrica A, B",command=lambda:[dosMat(12)])
 
 #Reportes
 Reportes = Menu(Barra)
+Reportes.config(bg = "#E74C3C",fg = "white")
 Reportes.add_command(label = "Reporte HTML",command=reporte)
 
 #Ayuda
 Ayuda = Menu(Barra)
+Ayuda.config(bg = "#E74C3C",fg = "white")
 Ayuda.add_command(label = "Información del estudiante",command=datosEstudiante)
 Ayuda.add_command(label = "Documentación del programa",command=Docu)
 

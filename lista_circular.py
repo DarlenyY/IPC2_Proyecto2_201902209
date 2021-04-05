@@ -78,6 +78,66 @@ class ListaCircular():
         else:
             print("No hay datos")
 
+    def buscarMat2(self,nombre,f,c,cant,accion):
+        aux = self.primero
+        if aux != None :
+            while aux.siguiente != self.primero:
+                if str(aux.nombre) == str(nombre):
+                    if accion == 5:
+                        aux.dato.imagen(nombre)
+                        aux.dato.agreH(f, c, cant)
+                        aux.dato.imagen(nombre+"agreH")
+                    elif accion == 6:
+                        aux.dato.imagen(nombre)
+                        aux.dato.agreV(f, c, cant)
+                        aux.dato.imagen(nombre+"agreV")
+                    elif accion == 8:
+                        aux.dato.imagen(nombre)
+                        aux.dato.agreT(f, c, cant)
+                        aux.dato.imagen(nombre+"agreT")                
+                aux = aux.siguiente
+            if str(aux.nombre )== str(nombre):
+                if accion == 5:
+                    aux.dato.imagen(nombre)
+                    aux.dato.agreH(f, c, cant)
+                    aux.dato.imagen(nombre+"agreH")
+                elif accion == 6:
+                    aux.dato.imagen(nombre)
+                    aux.dato.agreV(f, c, cant)
+                    aux.dato.imagen(nombre+"agreV")
+                elif accion == 8:
+                    aux.dato.imagen(nombre)
+                    aux.dato.agreT(f, c, cant)
+                    aux.dato.imagen(nombre+"agreT")
+        else:
+            print("No hay datos")
+
+    def buscarMat3(self,nombre,f1,c1,f2,c2,accion):
+        aux = self.primero
+        if aux != None :
+            while aux.siguiente != self.primero:
+                if str(aux.nombre) == str(nombre):
+                    if accion == 4:
+                        aux.dato.imagen(nombre)
+                        aux.dato.limpiar(f1,c1,f2,c2)
+                        aux.dato.imagen(nombre+"limp")
+                    elif accion == 7:
+                        aux.dato.imagen(nombre)
+                        aux.dato.agreR(f1,c1,f2,c2)
+                        aux.dato.imagen(nombre+"agreR")             
+                aux = aux.siguiente
+            if str(aux.nombre )== str(nombre):
+                if accion == 4:
+                    aux.dato.imagen(nombre)
+                    aux.dato.limpiar(f1,c1,f2,c2)
+                    aux.dato.imagen(nombre+"limp")
+                elif accion == 7:
+                    aux.dato.imagen(nombre)
+                    aux.dato.agreR(f1,c1,f2,c2)
+                    aux.dato.imagen(nombre+"agreR") 
+        else:
+            print("No hay datos")
+
     def ElegirNombre(self):
         nombres = ""
         aux = self.primero
