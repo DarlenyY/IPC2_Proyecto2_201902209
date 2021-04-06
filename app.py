@@ -118,16 +118,19 @@ def cargarArchivo():
 def elegir(lista,a):
     global datosRepo, nombre, image1, image2, label, label2, ListaC
     nombre = lista.get()
-    ListaC.buscarMat(nombre,a)
+    
     if a == 1:
+        ListaC.buscarMat(nombre,a)
         image2 = tk.PhotoImage(file=nombre+"rotH.png")
         now = datetime.now()
         datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Rotacion horizontal de una imagen - Matriz (o matrices) usadas: " +nombre + ","
     elif a == 2:
+        ListaC.buscarMat(nombre,a)
         image2 = tk.PhotoImage(file=nombre+"rotV.png")
         now = datetime.now()
         datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Rotacion vertical de una imagen - Matriz (o matrices) usadas: " +nombre + ","
     elif a == 3:
+        ListaC.buscarMat(nombre,a)
         image2 = tk.PhotoImage(file=nombre+"tran.png")
         now = datetime.now()
         datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Transpuesta de una imagen - Matriz (o matrices) usadas: " +nombre + ","
@@ -146,16 +149,19 @@ def linea(lista,f1,c1,ca,accion):
     c = c1.get()
     cant = ca.get()
     if str(f) != "" and str(c) != "" and str(cant) != "":
-        ListaC.buscarMat2(nombre, int(f), int(c), int(cant), accion)
+        
         if accion == 5:
+            ListaC.buscarMat2(nombre, int(f), int(c), int(cant), accion)
             image2 = tk.PhotoImage(file=nombre+"agreH.png")
             now = datetime.now()
             datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar línea horizontal a una imagen - Matriz (o matrices) usadas: " +nombre + ","
         elif accion == 6:
+            ListaC.buscarMat2(nombre, int(f), int(c), int(cant), accion)
             image2 = tk.PhotoImage(file=nombre+"agreV.png")
             now = datetime.now()
             datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar línea vertical a una imagen - Matriz (o matrices) usadas: " +nombre + ","
         elif accion == 8:
+            ListaC.buscarMat2(nombre, int(f), int(c), int(cant), accion)
             image2 = tk.PhotoImage(file=nombre+"agreT.png")
             now = datetime.now()
             datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar triangulo a una imagen - Matriz (o matrices) usadas: " +nombre + ","
@@ -177,12 +183,13 @@ def limYr(lista,f1,c1,f2,c2,accion):
     ff = f2.get()
     cc = c2.get()
     if str(f) != "" and str(c) != "" and str(ff) != "" and str(cc) != "":
-        ListaC.buscarMat3(nombre, int(f), int(c), int(ff),int(cc), accion)
         if accion == 4:
+            ListaC.buscarMat3(nombre, int(f),int(c) ,int(ff),int(cc), accion)
             image2 = tk.PhotoImage(file=nombre+"limp.png")
             now = datetime.now()
             datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Limpiar zona de una imagen - Matriz (o matrices) usadas: " +nombre + ","
         elif accion == 7:
+            ListaC.buscarMat3(nombre, int(f),int(c) ,int(ff),int(cc), accion)
             image2 = tk.PhotoImage(file=nombre+"agreR.png")
             now = datetime.now()
             datosRepo = datosRepo + str(now.day)+"/" + str(now.month)+"/" + str(now.year) +" - "+ str(now.time())  + " - Agregar rectángulo - Matriz (o matrices) usadas: " +nombre + ","
@@ -220,7 +227,8 @@ def rotar(op):
         ventana.mainloop()
     else:
         MessageBox.showinfo("Operaciones", "Debe cargar un archivo de entrada")
-
+def validate_entry(text):
+    return text.isdecimal()
 def limpiar():    
     global datosRepo, html
     if html: 
@@ -242,12 +250,12 @@ def limpiar():
         c = Label(ventana,text="Fila", fg = "#E74C3C")
         c.place(x=60,y=60)
         c.config(bg = "#17202A")
-        f1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f1 = tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         f1.place(x=90,y=60)
         d = Label(ventana,text="Columna", fg = "#E74C3C")
         d.place(x=145,y=60)
         d.config(bg = "#17202A")
-        c1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c1 = tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         c1.place(x=205,y=60)
         e = Label(ventana,text="Coordenada final", fg = "white")
         e.place(x=103,y=80)
@@ -255,12 +263,12 @@ def limpiar():
         f = Label(ventana,text="Fila", fg = "#E74C3C")
         f.place(x=60,y=100)
         f.config(bg = "#17202A")
-        f2 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f2 = tk.Entry(ventana, validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         f2.place(x=90,y=100)
         g = Label(ventana,text="Columna", fg = "#E74C3C")
         g.place(x=145,y=100)
         g.config(bg = "#17202A")
-        c2 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c2 = tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         c2.place(x=205,y=100)
         button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[limYr(lista,f1,c1,f2,c2,4),destruir(ventana)])
         button.place(x=125,y=130)
@@ -290,17 +298,17 @@ def agregarF(accion):
         c = Label(ventana,text="Fila", fg = "#E74C3C")
         c.place(x=60,y=60)
         c.config(bg = "#17202A")
-        f1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f1 = tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         f1.place(x=90,y=60)
         d = Label(ventana,text="Columna", fg = "#E74C3C")
         d.place(x=145,y=60)
         d.config(bg = "#17202A")
-        c1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c1 = tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         c1.place(x=205,y=60)
         e = Label(ventana,text="Cantidad de Elementos", fg = "white")
         e.place(x=85,y=80)
         e.config(bg = "#17202A")
-        cant= tk.Entry(ventana,width=10,justify=tk.LEFT)
+        cant= tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=10,justify=tk.LEFT)
         cant.place(x=117,y=100)
         button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[linea(lista,f1,c1,cant,accion),destruir(ventana)])
         button.place(x=125,y=130)
@@ -330,12 +338,12 @@ def agregarR():
         c = Label(ventana,text="Fila", fg = "#E74C3C")
         c.place(x=60,y=60)
         c.config(bg = "#17202A")
-        f1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f1 = tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         f1.place(x=90,y=60)
         d = Label(ventana,text="Columna", fg = "#E74C3C")
         d.place(x=145,y=60)
         d.config(bg = "#17202A")
-        c1 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c1 = tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         c1.place(x=205,y=60)
         e = Label(ventana,text="Cantidad", fg = "white")
         e.place(x=120,y=80)
@@ -343,12 +351,12 @@ def agregarR():
         f = Label(ventana,text="Filas", fg = "#E74C3C")
         f.place(x=60,y=100)
         f.config(bg = "#17202A")
-        f2 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        f2 = tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         f2.place(x=95,y=100)
         g = Label(ventana,text="Columnas", fg = "#E74C3C")
         g.place(x=140,y=100)
         g.config(bg = "#17202A")
-        c2 = tk.Entry(ventana,width=5,justify=tk.LEFT)
+        c2 = tk.Entry(ventana,validate = "key", validatecommand=(ventana.register(validate_entry),"%S"),width=5,justify=tk.LEFT)
         c2.place(x=205,y=100)
         button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[limYr(lista,f1,c1,f2,c2,7),destruir(ventana)])
         button.place(x=125,y=130)
@@ -433,16 +441,19 @@ def reporte():
                     <html lang="en">
                     <head>
                     <meta charset="utf-8">
+                    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                    <meta charset="UTF-8"/>
                     <meta name="viewport" content="width=device-width, initial-scale=1">
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
                     <title>Reporte</title>
                     </head>
-                    <body>
-                     <h1>Reporte</h1>
+                    <body  style="background-color:#17202A;">
+                    
+                     <h1 style="color:white">Reporte</h1>
                     <table class="table">
                     <tbody>""")
         for s in datos:
-            fichero.write("<tr><td>"+s+"</td></tr>\n")
+            fichero.write("<tr><td> <font color=\"#E74C3C\">"+s+"</font></td></tr>\n")
         fichero.write("""</tbody>
                     </table>
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
