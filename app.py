@@ -114,7 +114,7 @@ def cargarArchivo():
         html = True
     except:
         MessageBox.showerror("Error", "Carge el archivo de nuevo")
-def datosEstudiante(lista,lista2):
+def dos(lista,lista2):
     global datosRepo, nombre, image1, image2, label, label2, ListaC
     nombre = lista.get()
     nombre2 = lista2.get()
