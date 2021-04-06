@@ -78,6 +78,19 @@ class ListaCircular():
         else:
             print("No hay datos")
 
+    def buscarMat4(self,nombre):
+        aux = self.primero
+        if aux != None :
+            while aux.siguiente != self.primero:
+                if str(aux.nombre) == str(nombre):
+                    aux.dato.imagen(nombre)
+                aux = aux.siguiente
+            if str(aux.nombre )== str(nombre):
+                aux.dato.imagen(nombre)
+        else:
+            print("No hay datos")
+
+
     def buscarMat2(self,nombre,f,c,cant,accion):
         aux = self.primero
         if aux != None :

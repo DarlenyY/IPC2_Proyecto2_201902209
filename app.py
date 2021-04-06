@@ -114,7 +114,20 @@ def cargarArchivo():
         html = True
     except:
         MessageBox.showerror("Error", "Carge el archivo de nuevo")
-
+def datosEstudiante(lista,lista2):
+    global datosRepo, nombre, image1, image2, label, label2, ListaC
+    nombre = lista.get()
+    nombre2 = lista2.get()
+    ListaC.buscarMat4(nombre)
+    ListaC.buscarMat4(nombre2)
+    image2 = tk.PhotoImage(file=nombre)
+    image1 = tk.PhotoImage(file=nombre2)
+    image1 = image1.subsample(2,2)
+    image2 = image2.subsample(2,2)
+    label = tk.Label(Ventana, image = image1)
+    label2 = tk.Label(Ventana, image = image2)
+    label.place(x=20, y=20)
+    label2.place(x=20, y=300)
 def elegir(lista,a):
     global datosRepo, nombre, image1, image2, label, label2, ListaC
     nombre = lista.get()
@@ -426,7 +439,7 @@ def dosMat(accion):
         lista2["values"] = nom
         lista2.set(nom[0])
         lista2.pack()
-        button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[destruir(ventana)])
+        button = Button(ventana,text="Aceptar",fg = "white",bg="#E74C3C",command=lambda:[dos(lista,lista2),destruir(ventana)])
         button.pack()
         ventana.mainloop()
     else:
